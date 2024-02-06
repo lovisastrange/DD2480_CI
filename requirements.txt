@@ -1,0 +1,3 @@
+flask
+sphinx
+sphinx-rtd-theme
