@@ -1,4 +1,6 @@
-from flask import Flask, jsonify 
+from flask import Flask, jsonify
+from webhook_handler import Webhook_handler
+import os
 
 app = Flask(__name__)
 
@@ -7,8 +9,14 @@ def webhook():
     """
     Endpoint to handle incoming webhooks.
     """
+    handler = Webhook_handler(os.environ.get('WEBHOOK_SECRET'))
+    handler.verify()
+    data = handler.parse_data()
+    #
+    # Call other functions that use the data here, I think... :)
+    #
+    return jsonify({'status': 'success', 'message': 'Webhook processed'}), 200
 
-    return jsonify({'status': 'success', 'message': 'process started'}), 200
 
 @app.errorhandler(500)
 def handle_500(error):
