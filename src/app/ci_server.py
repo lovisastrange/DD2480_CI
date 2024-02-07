@@ -1,8 +1,9 @@
 from flask import Flask, jsonify 
+from app import create_app
 
-app = Flask(__name__)
+application = create_app()
 
-@app.route('/webhook', methods=['POST'])
+@application.route('/webhook', methods=['POST'])
 def webhook():
     """
     Endpoint to handle incoming webhooks.
@@ -10,7 +11,7 @@ def webhook():
 
     return jsonify({'status': 'success', 'message': 'process started'}), 200
 
-@app.errorhandler(500)
+@application.errorhandler(500)
 def handle_500(error):
     """
     Handle internal server errors.
@@ -21,7 +22,7 @@ def start_server():
     """
     Start the CI server.
     """
-    app.run(port=8080, debug=True)
+    application.run(port=8080, debug=True)
 
 if __name__ == '__main__':
     start_server()
