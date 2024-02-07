@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify, render_template
-from main import create_app
 
 bp = Blueprint('ci_server', __name__, url_prefix='/server')
 

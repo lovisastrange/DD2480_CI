@@ -1,12 +1,18 @@
 import pytest 
-from ..app import create_app
+from main import create_app
 
 @pytest.fixture
-def application():
-    application = create_app()
+def app():
+    app = create_app({
+        'TESTING': True
+    })
 
-    yield application
+    yield app
 
 @pytest.fixture()
-def client(application):
-    return application.test_client()
+def client(app):
+    return app.test_client()
+
+@pytest.fixture()
+def runner(app):
+    return app.test_cli_runner()
