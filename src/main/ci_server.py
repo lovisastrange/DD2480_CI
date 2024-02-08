@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, render_template
+from flask import Blueprint, jsonify, render_template, request
+from .webhook_handler import Webhook_handler
+import os
 
 bp = Blueprint('ci_server', __name__, url_prefix='/server')
 
@@ -11,8 +13,13 @@ def webhook():
     """
     Endpoint to handle incoming webhooks.
     """
-
-    return jsonify({'status': 'success', 'message': 'process started'}), 200
+    handler = Webhook_handler(os.environ.get('WEBHOOK_SECRET'))
+    handler.verify(request.headers, request.data)
+    data = handler.parse_data(request.get_json())
+    #
+    # Call other functions that use the data here, I think... :)
+    #
+    return jsonify(data), 200
 
 @bp.errorhandler(500)
 def handle_500(error):
