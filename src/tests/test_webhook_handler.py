@@ -1,71 +1,38 @@
-import unittest
-from unittest.mock import patch
-from app.webhook_handler import Webhook_handler
-from flask import Flask
+import json
+import pytest
 
-app = Flask(__name__)
-
-
-class TestWebhookHandler(unittest.TestCase):
-
-    def setUp(self):
-        self.secret_key = 'test_secret'
-        self.handler = Webhook_handler(self.secret_key)
-
-    """
-    Test case 1: Successful verification
-    Sending a request with a valid signature should not raise an exception.
-    """
-    @patch('webhook_handler.request')
-    def test_verify_success(self, mock_request):
-        mock_request.headers = {'X-Hub-Signature-256': 'sha256=valid_signature'}
-        mock_request.data = b'test data'
-        # Mocking `hmac.new().hexdigest()` to return 'valid_signature'
-        with patch('hmac.new') as mock_hmac:
-            mock_hmac.return_value.hexdigest.return_value = 'valid_signature'
-            # No exception means verification passed
-            self.handler.verify()
+def test_verify_success(client, mocker):
+    mocker.patch('main.webhook_handler.hmac.new', return_value=mocker.Mock(hexdigest=lambda: 'valid_signature'))
+    data = {
+        'repository': {'name': 'test_repo'},
+        'after': 'test_commit',
+        'ref': 'refs/heads/test_branch'
+    }
     
-    """
-    Test case 2: Failed verification
-    Sending a request without a signature should raise a ValueError.
-    """
-    @patch('webhook_handler.request')
-    def test_verify_failure(self, mock_request):
-        mock_request.headers = {'X-Hub-Signature-256': 'sha256=invalid_signature'}
-        mock_request.data = b'test data'
-        with patch('hmac.new') as mock_hmac:
-            mock_hmac.return_value.hexdigest.return_value = 'valid_signature'
-            with self.assertRaises(ValueError):
-                self.handler.verify()
+    response = client.post('/server/webhook', headers={'X-Hub-Signature-256': f'sha256=valid_signature', 'Content-Type': 'application/json'}, json=data)
+    assert response.status_code == 200
 
-    """
-    Test case 3: Successful data parsing
-    Sending a request with valid data should return the expected dictionary.
-    """
-    @patch('webhook_handler.request')
-    def test_parse_data_success(self, mock_request):
-        mock_request.get_json.return_value = {
-            'repository': {'name': 'test_repo'},
-            'after': 'test_commit',
-            'ref': 'refs/heads/test_branch'
-        }
-        expected = {
-            "repo": "test_repo",
-            "commit": "test_commit",
-            "branch": "test_branch"
-        }
-        self.assertEqual(self.handler.parse_data(), expected)
+def test_verify_failure(client, mocker):
+    mocker.patch('main.webhook_handler.hmac.new', return_value=mocker.Mock(hexdigest=lambda: 'valid_signature'))
+    
+    with pytest.raises(ValueError):
+        client.post('/server/webhook', headers={'X-Hub-Signature-256': 'sha256=invalid_signature'}, data=b'test data')
 
-    """
-    Test case 4: Missing data
-    Sending a request without data should raise a ValueError.
-    """
-    @patch('webhook_handler.request')
-    def test_parse_data_missing_data(self, mock_request):
-        mock_request.get_json.return_value = None
-        with self.assertRaises(ValueError):
-            self.handler.parse_data()
+def test_parse_data_success(client, mocker):
+    mocker.patch('main.webhook_handler.hmac.new', return_value=mocker.Mock(hexdigest=lambda: 'valid_signature'))
+    data = {
+        'repository': {'name': 'test_repo'},
+        'after': 'test_commit',
+        'ref': 'refs/heads/test_branch'
+    }
+    response = client.post('/server/webhook', headers={'X-Hub-Signature-256': f'sha256=valid_signature', 'Content-Type': 'application/json'}, json=data)
+    expected = {
+        "repo": "test_repo",
+        "commit": "test_commit",
+        "branch": "test_branch"
+    }
+    assert json.loads(response.data) == expected
 
-if __name__ == '__main__':
-    unittest.main()
+def test_parse_data_missing_data(client):
+    with pytest.raises(ValueError):
+        client.post('/server/webhook', data={})
