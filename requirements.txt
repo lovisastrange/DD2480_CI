@@ -2,3 +2,4 @@ flask
 sphinx
 sphinx-rtd-theme
 pytest
+python-dotenv
