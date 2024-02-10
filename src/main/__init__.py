@@ -17,7 +17,7 @@ def create_app(test_config=None):
     logger.addHandler(consoleHandler)
 
     os.makedirs('../logs/', exist_ok=True)
-    fileHandler = RotatingFileHandler(f"../logs/{datetime.now().strftime('%Y-%m-%d_%H:%M')}.log", backupCount=100, maxBytes=1024)
+    fileHandler = RotatingFileHandler(f"../logs/{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.log", backupCount=100, maxBytes=1024)
     fileHandler.setFormatter(logFormatter)
     logger.addHandler(fileHandler)
 
