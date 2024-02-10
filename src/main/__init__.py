@@ -1,11 +1,26 @@
 import os
 
 from flask import Flask
+import logging
+from logging.handlers import RotatingFileHandler
+from datetime import datetime
 
 def create_app(test_config=None):
     """
     App factory
     """
+    logger = logging.getLogger()
+    logFormatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setFormatter(logFormatter)
+    logger.addHandler(consoleHandler)
+
+    os.makedirs('../logs/', exist_ok=True)
+    fileHandler = RotatingFileHandler(f"../logs/{datetime.now().strftime('%Y-%m-%d_%H:%M')}.log", backupCount=100, maxBytes=1024)
+    fileHandler.setFormatter(logFormatter)
+    logger.addHandler(fileHandler)
+
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, jsonify, render_template, request, current_app
 from .webhook_handler import Webhook_handler
 import os
 
@@ -6,6 +6,7 @@ bp = Blueprint('ci_server', __name__, url_prefix='/server')
 
 @bp.route('/', methods=["GET"])
 def home():
+    current_app.logger.info("Home page loaded")
     return render_template('base.html')
 
 @bp.route('/webhook', methods=['POST'])
