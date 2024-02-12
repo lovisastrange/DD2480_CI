@@ -5,9 +5,16 @@ import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
-def create_app(test_config=None):
+def create_app(test_config : dict = None):
     """
-    App factory
+    App factory: creates the app and 
+    makes it available for the rest
+    of the program.
+
+    Parameters
+    ----------
+    test_config: dict
+        used to provide a special config for testing
     """
     logger = logging.getLogger()
     logFormatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")

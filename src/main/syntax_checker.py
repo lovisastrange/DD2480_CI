@@ -18,7 +18,15 @@ class Syntax_Checker:
 
 
     def do_syntax_check(self,path):
-        ## Input: Path of files to be checked
+        """
+        Runs pylint on the code in the given path, 
+        only checking for errors.
+
+        Parameters
+        ----------
+        path: str
+            path of files to be checked
+        """
         ## Output: Sets message about syntax check status
 
         output = StringIO()  # Captures output from stdout
@@ -57,7 +65,14 @@ class Syntax_Checker:
                 self.message += warnings[1]
 
     def do_additional_check(self,path):
-        ## Input: Path of files to be checked
+        """
+        Runs pylint on the code in the given path.
+
+        Parameters
+        ----------
+        path: str
+            path of files to be checked
+        """
         ## Output: Does another round of checks on the code
 
         report_format = "--msg-template='{C}:{line:3d},{column}: {obj}: {msg}'"

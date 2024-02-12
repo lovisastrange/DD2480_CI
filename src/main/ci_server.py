@@ -6,6 +6,10 @@ bp = Blueprint('ci_server', __name__, url_prefix='/server')
 
 @bp.route('/', methods=["GET"])
 def home():
+    """
+    Front-end of the app.
+    Displays the list of previous builds.
+    """
     current_app.logger.info("Home page loaded")
     return render_template('base.html')
 
@@ -25,6 +29,6 @@ def webhook():
 @bp.errorhandler(500)
 def handle_500(error):
     """
-    Handle internal server errors.
+    Endpoint to handle internal server errors.
     """
     return jsonify({'status': 'error', 'message': str(error)}), 500
