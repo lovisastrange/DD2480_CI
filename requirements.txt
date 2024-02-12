@@ -4,3 +4,4 @@ sphinx-rtd-theme
 pylint==2.16.2
 pytest
 pytest-mock
+dotenv
