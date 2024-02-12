@@ -69,3 +69,20 @@ body {
     height: auto;
     border-radius: 5px;
 }
+
+.build-link:link {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.build-link:visited {
+    color: #6f42c1;
+}
+
+.build-link:hover {
+    color: #0056b3;
+}
+
+.build-link:active {
+    color: #003975;
+}
