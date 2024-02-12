@@ -2,3 +2,5 @@ flask
 sphinx
 sphinx-rtd-theme
 pylint
+pytest
+pytest-mock
