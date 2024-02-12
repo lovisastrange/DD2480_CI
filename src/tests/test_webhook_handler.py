@@ -1,5 +1,8 @@
 import json
 import pytest
+import os
+
+os.environ['WEBHOOK_SECRET'] = 'valid_signature'
 
 def test_verify_success(client, mocker):
     mocker.patch('main.webhook_handler.hmac.new', return_value=mocker.Mock(hexdigest=lambda: 'valid_signature'))
