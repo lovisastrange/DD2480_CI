@@ -7,6 +7,25 @@
     <title>CI Server</title>
 </head>
 <body>
+    <div class="main_section">
     <h1>DD2480 - CI Server</h1>
+    <h2>Build history</h2>
+    <ul>
+    {% for build in build_hist %}
+        <li>
+            <a href="{{ url_for('ci_server.specific_build', build_id = build['id']) }}">Build #{{ build['id'] }}</a>
+            {% if build['status'] == 'success' %} - Status: <span class="success">{{ build["status"].capitalize() }}</span> 
+            {% else %} - Status: <span class="fail">{{ build["status"].capitalize() }}</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+    </div>
+    <footer class="footer">
+        Made by Group 10
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="KTH Logo" class="footer-logo">
+        </div>
+    </footer>
 </body>
 </html>

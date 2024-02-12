@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request, current_app
 from .webhook_handler import Webhook_handler
+from .db import query_builds, query_build
 import os
 
 bp = Blueprint('ci_server', __name__, url_prefix='/server')
@@ -11,7 +12,18 @@ def home():
     Displays the list of previous builds.
     """
     current_app.logger.info("Home page loaded")
-    return render_template('base.html')
+    build_hist = query_builds()
+    return render_template('base.html', build_hist=build_hist)
+
+@bp.route('/<int:build_id>', methods=["GET"])
+def specific_build(build_id):
+    """
+    Route accessing a specific build in
+    the build history.
+    """
+    data = query_build(build_id)
+    return render_template('specific_build.html', data=data)
+
 
 @bp.route('/webhook', methods=['POST'])
 def webhook():

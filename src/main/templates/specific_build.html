@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Build #{{ data["id"] }}</title>
+</head>
+<body>
+    <div class="main_section">
+    <h1>Build No. {{ data["id"] }}</h1>
+    <p><strong>Event</strong>: {{data["event"].capitalize()}}</p>
+    <p><strong>Date</strong>: {{data["date"]}}</p>
+    <p><strong>Branch</strong>: {{data["branch"]}}</p>
+    <p><strong>Status</strong>: {% if data['status'] == 'success' %}<span class="success">{{ data["status"].capitalize() }}</span> 
+        {% else %}<span class="fail">{{ data["status"].capitalize() }}</span>
+        {% endif %}</p>
+        <div class="button-container"><a href="{{ url_for('ci_server.home') }}" class="button">Return to Main Page</a></div>
+</div>
+<footer class="footer">
+    Made by Group 10
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="KTH Logo" class="footer-logo">
+    </div>
+</footer>
+</body>
+</html>
