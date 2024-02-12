@@ -1,6 +1,6 @@
 flask
 sphinx
 sphinx-rtd-theme
-pylint
+pylint==2.16.2
 pytest
 pytest-mock
