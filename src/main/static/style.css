@@ -61,3 +61,11 @@ body {
 .button-container {
     text-align: center;
 }
+
+.footer-logo {
+    display: block;
+    margin: 10px auto;
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+}
