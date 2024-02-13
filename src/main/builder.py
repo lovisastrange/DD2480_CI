@@ -4,6 +4,7 @@ import subprocess
 import yaml
 from dotenv import load_dotenv
 import requests
+import uuid
 from .syntax_checker import Syntax_Checker
 
 class Builder:
@@ -61,6 +62,7 @@ class Builder:
         Changes to the directory the cloned project is stored in
         and tests the code using pytest.
         """
+        build_id = str(uuid.uuid4())
 
         repo_path = self.clone_repo(self.repo, self.branch, self.clone_url)
         os.chdir(repo_path)
@@ -69,6 +71,7 @@ class Builder:
             subprocess.run(["pip", "install", "-r", "requirements.txt"], check=True)
         except Exception as e:
             return {
+            "id": build_id,
             "repo": self.repo,
             "commit": self.data['commit'],
             "branch": self.branch,
@@ -81,6 +84,7 @@ class Builder:
         first_line = checker.message.split("\n")[0]
         if first_line == "The code contains syntax errors. ":
             return {
+            "id": build_id,
             "repo": self.repo,
             "commit": self.data['commit'],
             "branch": self.branch,
@@ -98,6 +102,7 @@ class Builder:
 
         except Exception as e:
             return {
+            "id": build_id,
             "repo": self.repo,
             "commit": self.data['commit'],
             "branch": self.branch,
@@ -112,6 +117,7 @@ class Builder:
             os.environ['PYTHONPATH'] = 'src'
 
         return {
+            "id": str(uuid.uuid4()),
             "repo": self.repo,
             "commit": self.data['commit'],
             "branch": self.branch,
