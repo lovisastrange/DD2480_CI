@@ -70,6 +70,7 @@ class Webhook_handler:
 
         return {
             "repo": data.get('repository', {}).get('name', 'unknown'),
+            "clone_url": data.get('repository', {}).get('clone_url', 'unknown'),
             "commit": data.get('after', 'unknown'),
             "branch": data.get('ref', 'unknown').split('/')[-1]
         }
