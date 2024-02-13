@@ -5,3 +5,4 @@ pylint==2.16.2
 pytest
 python-dotenv
 pytest-mock
+pytest-asyncio
