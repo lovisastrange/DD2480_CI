@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, render_template, request, current_app
 from .webhook_handler import Webhook_handler
 from .db import query_builds, query_build
 from .builder import Builder
+from .notification import send_notification_webhook
 from dotenv import load_dotenv
 import os
 
@@ -44,6 +45,7 @@ def ci_process(data, token):
     builder = Builder(data)
     build = builder.build()
     builder.send_status(data, build, token)
+    send_notification_webhook(f"Build {build['id']} finished with status {build['test_result']}")
 
 @bp.errorhandler(500)
 def handle_500(error):

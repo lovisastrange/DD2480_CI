@@ -57,5 +57,3 @@ def test_specific_build_page(client):
     assert f"Date</strong>: {test_build['date']}" in content
     assert f"Branch</strong>: {test_build['branch']}" in content
     assert f"Status</strong>: <span class=\"{ 'success' if test_build['status'] == 'success' else 'fail' }\">{test_build['status'].capitalize()}" in content
-
-
