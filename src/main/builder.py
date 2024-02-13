@@ -106,12 +106,9 @@ class Builder:
         }
 
         finally:
-            subprocess.run(["deactivate"])
-            subprocess.run(["rm", "-rf", "venv"])
             os.chdir("..")
             shutil.rmtree(repo_path)
             load_dotenv()
-            os.environ['WEBHOOK_SECRET'] = os.getenv('WEBHOOK_SECRET')
             os.environ['PYTHONPATH'] = 'src'
 
         return {
