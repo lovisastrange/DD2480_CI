@@ -9,7 +9,7 @@ def test_clone_repo():
     #when cloning a repository from GitHub.
     data = {
         "repo": "https://github.com/user/repo.git",
-        "clone": "https://github.com/user/repo.git",
+        "clone_url": "https://github.com/user/repo.git",
         "commit": "123abc",
         "branch": "main"
     }
