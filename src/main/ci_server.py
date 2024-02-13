@@ -55,6 +55,7 @@ def ci_process(data, token):
             "context": "ci/build"
         }
         requests.post(url, headers=headers, json=payload)
+        # add data to database
     else:
         url = f"https://api.github.com/repos/{data['owner']}/{data['repo']}/statuses/{data['commit']}"
         headers = {
@@ -67,6 +68,7 @@ def ci_process(data, token):
             "context": "ci/build"
         }
         requests.post(url, headers=headers, json=payload)
+        # add data to database
     
 
 @bp.errorhandler(500)
