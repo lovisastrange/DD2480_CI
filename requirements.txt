@@ -7,4 +7,3 @@ python-dotenv
 pytest-mock
 pytest-asyncio
 discord
-pyyaml
