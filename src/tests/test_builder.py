@@ -1,0 +1,25 @@
+from unittest.mock import patch
+import pytest
+from src.main.builder import Builder
+import os
+
+def test_clone_repo():
+    data = {
+        "repo": "https://github.com/user/repo.git",
+        "clone": "https://github.com/user/repo.git",
+        "commit": "123abc",
+        "branch": "main"
+    }
+    builder = Builder(data)
+    repo_path = os.path.join(os.getcwd(), builder.repo)
+
+    with patch('subprocess.run') as mock_run:
+        # Call the clone_repo method
+        builder.clone_repo()
+        
+        # Assert that subprocess.run was called with the correct arguments
+        mock_run.assert_called_with(
+            ["git", "clone", "--single-branch", "--branch", "main", data["clone"], f"{repo_path}"],check=True)
+
+if __name__ == "__main__":
+    pytest.main([__file__])
