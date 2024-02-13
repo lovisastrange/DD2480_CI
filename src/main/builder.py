@@ -4,6 +4,7 @@ import subprocess
 import yaml
 from dotenv import load_dotenv
 import requests
+from .syntax_checker import Syntax_Checker
 
 class Builder:
     """
@@ -65,8 +66,6 @@ class Builder:
         os.chdir(repo_path)
 
         try:
-            subprocess.run(["python", "-m", "venv", "venv"])
-            subprocess.run(["venv/bin/python", "-c"])
             subprocess.run(["pip", "install", "-r", "requirements.txt"], check=True)
         except Exception as e:
             return {
@@ -76,6 +75,18 @@ class Builder:
             "test_result": "fail",
             "message": str(e),
         }
+
+        checker = Syntax_Checker()
+        checker.do_syntax_check(os.getcwd())
+        first_line = checker.message.split("\n")[0]
+        if first_line == "The code contains syntax errors. ":
+            return {
+            "repo": self.repo,
+            "commit": self.data['commit'],
+            "branch": self.branch,
+            "test_result": "fail",
+            "message": checker.message
+            }
 
         try:
             with open(".github/workflows/python-app.yml", 'r') as file:
