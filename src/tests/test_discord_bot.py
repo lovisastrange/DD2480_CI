@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import AsyncMock, patch
-from discord_bot.main import CI_notificator
+from src.main.discord_bot import CI_notificator
 
 @pytest.fixture
 def bot():

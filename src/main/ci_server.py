@@ -3,7 +3,7 @@ from .webhook_handler import Webhook_handler
 from .db import query_builds, query_build
 from .builder import Builder
 from dotenv import load_dotenv
-from ..discord_bot.main import CI_notificator
+from .discord_bot import CI_notificator
 import os
 import threading
 
