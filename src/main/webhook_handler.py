@@ -52,13 +52,15 @@ class Webhook_handler:
             else:
                 raise ValueError('Invalid Signature')
 
-    def parse_data(self, data):
+    def parse_data(self, headers, data):
         """
         Parses the necessary data to clone and
         build the code.
 
         Parameters
         ----------
+        headers: Headers
+            the request headers
         data: bytes
             the request payload
         """
@@ -69,8 +71,10 @@ class Webhook_handler:
                 raise ValueError('Missing Data')
 
         return {
+            "event": headers.get('X-GitHub-Event'),
             "repo": data.get('repository', {}).get('name', 'unknown'),
             "clone_url": data.get('repository', {}).get('clone_url', 'unknown'),
+            "owner": data.get('repository', {}).get('owner', {}).get('login', 'unknown'),
             "commit": data.get('after', 'unknown'),
             "branch": data.get('ref', 'unknown').split('/')[-1]
         }

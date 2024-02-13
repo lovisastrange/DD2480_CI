@@ -1,6 +1,9 @@
 import os
 import shutil
 import subprocess
+import yaml
+from dotenv import load_dotenv
+import requests
 
 class Builder:
     """
@@ -60,30 +63,79 @@ class Builder:
 
         repo_path = self.clone_repo(self.repo, self.branch, self.clone_url)
         os.chdir(repo_path)
-        result = None
 
         try:
+            subprocess.run(["python", "-m", "venv", "venv"])
+            subprocess.run(["venv/bin/python", "-c"])
             subprocess.run(["pip", "install", "-r", "requirements.txt"], check=True)
-        except subprocess.CalledProcessError:
-            raise Exception("Failed to install requirements")
+        except Exception as e:
+            return {
+            "repo": self.repo,
+            "commit": self.data['commit'],
+            "branch": self.branch,
+            "test_result": "fail",
+            "message": str(e),
+        }
 
         try:
-            result = subprocess.run(["pytest"], capture_output=True, text=True, check=True)
-            
-            print(result.stdout)
-        except subprocess.CalledProcessError:
-            raise Exception("Build process failed")
+            with open(".github/workflows/python-app.yml", 'r') as file:
+                yaml_content = yaml.safe_load(file)
+                commands = [step['run'] for step in yaml_content["jobs"]["build"].get('steps', []) if step.get('name') == 'Test with pytest']
+
+            for cmd in commands:
+                subprocess.run(cmd, shell=True, check=True)
+
+        except Exception as e:
+            return {
+            "repo": self.repo,
+            "commit": self.data['commit'],
+            "branch": self.branch,
+            "test_result": "fail",
+            "message": str(e)
+        }
 
         finally:
+            subprocess.run(["deactivate"])
+            subprocess.run(["rm", "-rf", "venv"])
+            os.chdir("..")
             shutil.rmtree(repo_path)
-
-        os.chdir(os.getcwd())
+            load_dotenv()
+            os.environ['WEBHOOK_SECRET'] = os.getenv('WEBHOOK_SECRET')
+            os.environ['PYTHONPATH'] = 'src'
 
         return {
             "repo": self.repo,
             "commit": self.data['commit'],
             "branch": self.branch,
-            "test_result": result
+            "test_result": "success"
         }
+    
+    def send_status(self, data, build, token):
+        if build["test_result"] == "fail":
+            url = f"https://api.github.com/repos/{data['owner']}/{data['repo']}/statuses/{data['commit']}"
+            headers = {
+                'Authorization': f'token {token}',
+                'Accept': 'application/vnd.github.v3+json',
+            }
+            payload = {
+                "state": "failure",
+                "description": build["message"],
+                "context": "ci/build"
+            }
+            requests.post(url, headers=headers, json=payload)
+            # add data to database
+        else:
+            url = f"https://api.github.com/repos/{data['owner']}/{data['repo']}/statuses/{data['commit']}"
+            headers = {
+                'Authorization': f'token {token}',
+                'Accept': 'application/vnd.github.v3+json',
+            }
+            payload = {
+                "state": "success",
+                "description": "Build successful",
+                "context": "ci/build"
+            }
+            requests.post(url, headers=headers, json=payload)
+            # add data to database
 
 
