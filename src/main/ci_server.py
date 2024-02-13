@@ -35,7 +35,7 @@ def webhook():
     load_dotenv()
     token = os.getenv('GITHUB_TOKEN')
     handler = Webhook_handler(os.getenv('WEBHOOK_SECRET'))
-    #handler.verify(request.headers, request.data)
+    handler.verify(request.headers, request.data)
     data = handler.parse_data(request.headers, request.get_json())
     ci_process(data, token)
     return jsonify(data), 200
