@@ -3,9 +3,14 @@ from .webhook_handler import Webhook_handler
 from .db import query_builds, query_build
 from .builder import Builder
 from dotenv import load_dotenv
+from ..discord_bot.main import CI_notificator
 import os
+import threading
 
 bp = Blueprint('ci_server', __name__, url_prefix='/server')
+notificator = CI_notificator()
+notificator_thread = threading.Thread(target=notificator.bot.run, args=(notificator.token,))
+notificator_thread.start()
 
 @bp.route('/', methods=["GET"])
 def home():
@@ -44,6 +49,7 @@ def ci_process(data, token):
     builder = Builder(data)
     build = builder.build()
     builder.send_status(data, build, token)
+    notificator.send_notification(f"Build {build['id']} finished with status {build['status']}")
 
 @bp.errorhandler(500)
 def handle_500(error):
