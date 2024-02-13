@@ -15,7 +15,7 @@ def test_clone_repo():
 
     with patch('subprocess.run') as mock_run:
         # Call the clone_repo method
-        builder.clone_repo()
+        builder.clone_repo(data["repo"],data["branch"],data["clone"])
         
         # Assert that subprocess.run was called with the correct arguments
         mock_run.assert_called_with(
