@@ -1,6 +1,7 @@
 from datetime import datetime
+from flask import current_app
 
-builds = [
+test_builds = [
         {
         "id": 10, 
         "date": datetime(2024, 2, 1).strftime("%d/%m/%Y, %H:%M:%S"),
@@ -30,15 +31,17 @@ builds = [
         "status": "fail", 
         },
     ]
+builds = test_builds #temporary
 
 def query_build(build_id):
     """
     Function returning a specific build from the database.
     """
-    return list(filter(lambda build: build["id"] == build_id, builds))[0]
+    data_source = test_builds if current_app.config.get("TESTING") else builds
+    return next((build for build in data_source if build["id"] == build_id), None)
 
 def query_builds():
     """
     Function returning the list of all builds from the database.
     """
-    return builds
+    return test_builds if current_app.config.get("TESTING") else builds

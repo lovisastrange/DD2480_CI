@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, render_template, request, current_app
 from .webhook_handler import Webhook_handler
 from .db import query_builds, query_build
+from .builder import Builder
+from dotenv import load_dotenv
 import os
 
 bp = Blueprint('ci_server', __name__, url_prefix='/server')
@@ -30,13 +32,18 @@ def webhook():
     """
     Endpoint to handle incoming webhooks.
     """
-    handler = Webhook_handler(os.environ.get('WEBHOOK_SECRET'))
+    load_dotenv()
+    token = os.getenv('GITHUB_TOKEN')
+    handler = Webhook_handler(os.getenv('WEBHOOK_SECRET'))
     handler.verify(request.headers, request.data)
-    data = handler.parse_data(request.get_json())
-    #
-    # Call other functions that use the data here, I think... :)
-    #
+    data = handler.parse_data(request.headers, request.get_json())
+    ci_process(data, token)
     return jsonify(data), 200
+
+def ci_process(data, token):
+    builder = Builder(data)
+    build = builder.build()
+    builder.send_status(data, build, token)
 
 @bp.errorhandler(500)
 def handle_500(error):
