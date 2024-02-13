@@ -22,6 +22,13 @@ class CI_notificator:
             print(ctx)
             await ctx.send('pong')
         
+        
+    
+        @bot.command()
+        async def test(ctx):
+            print(ctx)
+            await self.send_notification("Test message")
+
         return bot
     
     async def send_notification(self, message):
