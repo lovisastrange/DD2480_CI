@@ -49,7 +49,7 @@ def ci_process(data, token):
     builder = Builder(data)
     build = builder.build()
     builder.send_status(data, build, token)
-    notificator.send_notification(f"Build {build['id']} finished with status {build['status']}")
+    notificator.send_notification(f"Build {build['id']} finished with status {build['test_result']}")
 
 @bp.errorhandler(500)
 def handle_500(error):
