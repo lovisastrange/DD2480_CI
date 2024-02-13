@@ -4,6 +4,9 @@ from src.main.builder import Builder
 import os
 
 def test_clone_repo():
+    #Input: A mock dictionary containing repository information, including repository URL, branch, and commit.
+    #Verifies that the clone_repo method correctly calls subprocess.run with the appropriate arguments
+    #when cloning a repository from GitHub.
     data = {
         "repo": "https://github.com/user/repo.git",
         "clone": "https://github.com/user/repo.git",

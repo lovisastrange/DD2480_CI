@@ -3,6 +3,22 @@ import shutil
 import subprocess
 
 class Builder:
+    """
+     A class to clone repos from github and build the code from the repo.
+
+    Attributes
+    ----------
+    data: dict
+        Data retrieved from a Github webhook
+
+    Methods
+    -------
+    clone_repo(repo,branch,clone_url):
+        Clones the repository from the clone url specified in the webhook payload and checks out the branch
+    build():
+        Builds the project from the cloned github repo
+    """
+
     def __init__(self, data):
         self.data = data
         self.branch = data['branch']
@@ -11,6 +27,19 @@ class Builder:
         self.clone_url = data['clone_url']
 
     def clone_repo(self,repo,branch,clone_url):
+        """
+        Clones the repository from the clone url specified in the webhook payload and checks out the branch
+
+        Parameters
+        ----------
+        repo: str
+            name of the repo from which the webhook was triggered
+        branch: str
+            name of the github branch
+        clone_url: str
+            url to clone the github repo
+        """
+
         repo_path = os.path.join(os.getcwd(), repo)
 
         if(os.path.exists(repo_path)):
@@ -24,6 +53,11 @@ class Builder:
         return repo_path
     
     def build(self):
+        """
+        Changes to the directory the cloned project is stored in
+        and tests the code using pytest.
+        """
+
         repo_path = self.clone_repo(self.repo, self.branch, self.clone_url)
         os.chdir(repo_path)
         result = None
