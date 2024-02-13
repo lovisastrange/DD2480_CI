@@ -18,11 +18,11 @@ def test_clone_repo():
 
     with patch('subprocess.run') as mock_run:
         # Call the clone_repo method
-        builder.clone_repo(data["repo"],data["branch"],data["clone"])
+        builder.clone_repo(data["repo"],data["branch"],data["clone_url"])
         
         # Assert that subprocess.run was called with the correct arguments
         mock_run.assert_called_with(
-            ["git", "clone", "--single-branch", "--branch", "main", data["clone"], f"{repo_path}"],check=True)
+            ["git", "clone", "--single-branch", "--branch", "main", data["clone_url"], f"{repo_path}"],check=True)
 
 if __name__ == "__main__":
     pytest.main([__file__])
