@@ -2,6 +2,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime
+import os
+
+if not os.path.exists('CI.db'):
+    # make file
+    open('CI.db', 'w').close()
 
 engine = create_engine('sqlite:///CI.db')
 db_session = scoped_session(sessionmaker(autocommit=False,
@@ -39,52 +44,3 @@ def init_db():
     build1 = BuildHistory('new-branch', 'pull request', 'fail')
     db_session.add(build1)
     db_session.commit()
-
-
-# from datetime import datetime
-# from flask import current_app
-
-# test_builds = [
-#         {
-#         "id": 10, 
-#         "date": datetime(2024, 2, 1).strftime("%d/%m/%Y, %H:%M:%S"),
-#         "branch": "new-branch",
-#         "event": "pull request",
-#         "status": "fail", 
-#         },
-#         {
-#         "id": 11, 
-#         "date": datetime(2024, 2, 3).strftime("%d/%m/%Y, %H:%M:%S"),
-#         "branch": "new-branch",
-#         "event": "push",
-#         "status": "success", 
-#         },
-#         {
-#         "id": 12, 
-#         "date": datetime(2024, 2, 5).strftime("%d/%m/%Y, %H:%M:%S"),
-#         "branch": "another-new-branch",
-#         "event": "push",
-#         "status": "success", 
-#         },
-#         {
-#         "id": 13, 
-#         "date": datetime(2024, 2, 7).strftime("%d/%m/%Y, %H:%M:%S"),
-#         "branch": "fix-wrong-type",
-#         "event": "pull request",
-#         "status": "fail", 
-#         },
-#     ]
-# builds = test_builds #temporary
-
-# def query_build(build_id):
-#     """
-#     Function returning a specific build from the database.
-#     """
-#     data_source = test_builds if current_app.config.get("TESTING") else builds
-#     return next((build for build in data_source if build["id"] == build_id), None)
-
-# def query_builds():
-#     """
-#     Function returning the list of all builds from the database.
-#     """
-#     return test_builds if current_app.config.get("TESTING") else builds
