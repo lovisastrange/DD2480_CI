@@ -56,7 +56,7 @@ ngrok http --domain=<YOUR_URL> 8000
 Accessing the front-end:
 To see the build history on the web browser, go to: “https://<YOUR_URL>/server/”
 
-![front-end.png]
+![front-end.png](front-end.png)
 
 ## Assessment of way of working
 We still feel like our way of working fulfills the “In place” level of the checklist. The tools that we are using, for example GitHub issues and pull requests, are still working well. More than last time, we have tried to split up larger issues into smaller sub-issues, which has given us some more structure for working on large parts of the projects. To get to the “Working well”-level, we still need to become more comfortable with the way of working that we are using. We would also need to do even more evaluating and adjusting of how we are using the tools we have to best help us work together. For example, before the next assignment, we should evaluate our use of sub-issues to see if they helped our workflow, and if we should continue to use them.
