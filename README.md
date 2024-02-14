@@ -25,7 +25,7 @@ pip install -r requirements
 Go to the settings tab of the considered repository, and under Webhooks, click on “Add webhook”, then enter the payload URL (like https://<YOUR_URL>/server/webhook - you can get an url with ngrok) and set the content type to “application/json”. Choose a webhook secret for request verification and select the relevant events.
 
 ### YOUR_URL with ngrok
-- You can get your own url from domain page.
+- You can get your own url from domain section on your own My page.
 
 ## Setting up the environment
 Make a `.env` file at the root of the project directory, containing three keys:
@@ -56,7 +56,7 @@ ngrok http --domain=<YOUR_URL> 8000
 Accessing the front-end:
 To see the build history on the web browser, go to: “https://<YOUR_URL>/server/”
 
-![front-end.png]
+![front-end.png](front-end.png)
 
 ## Assessment of way of working
 We still feel like our way of working fulfills the “In place” level of the checklist. The tools that we are using, for example GitHub issues and pull requests, are still working well. More than last time, we have tried to split up larger issues into smaller sub-issues, which has given us some more structure for working on large parts of the projects. To get to the “Working well”-level, we still need to become more comfortable with the way of working that we are using. We would also need to do even more evaluating and adjusting of how we are using the tools we have to best help us work together. For example, before the next assignment, we should evaluate our use of sub-issues to see if they helped our workflow, and if we should continue to use them.
@@ -65,7 +65,7 @@ We still feel like our way of working fulfills the “In place” level of the c
 * Compilation: The code is first syntax checked for errors with pylint, and fails if syntax errors are found. Then, if there are no syntax errors, the code is checked for warnings. This is tested via unit tests for some small programs with and without errors.
 * Testing: The automatic testing is done by running pytest on the code in the repo. 
 * Notifications: The notifications are sent through discord via a discord webhook, which was tested with unit tests to test that it sends messages correctly.
-* History: The URL list for the project can be found at (when the server is running):: https://mantis-peaceful-locust.ngrok-free.app/server.
+* History: All status are stored in sqlite3. You can watch the list on the web browser.
 
 
 ## Statement of contributions
