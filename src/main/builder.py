@@ -45,7 +45,7 @@ class Builder:
             url to clone the github repo
         """
 
-        repo_path = os.path.join(os.getcwd(), repo)
+        repo_path = os.path.join(os.getcwd(), "repository",repo)
 
         if(os.path.exists(repo_path)):
             shutil.rmtree(repo_path)
