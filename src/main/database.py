@@ -18,7 +18,6 @@ Base.query = db_session.query_property()
 class BuildHistory(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    #今の時刻
     date = Column(DateTime, default=datetime.now)
     branch = Column(String(50))
     event = Column(String(50))
@@ -40,7 +39,7 @@ def init_db():
     # you will have to import them first before calling init_db()
     
     Base.metadata.create_all(bind=engine)
-    # データを追加
+    # Insert a row of data
     build1 = BuildHistory('new-branch', 'pull request', 'fail')
     db_session.add(build1)
     db_session.commit()
