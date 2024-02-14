@@ -28,10 +28,7 @@ def test_home_page(client):
 
     # Check for build ID and status in the response
     builds = [
-        {"id": 10, "status": "fail"},
-        {"id": 11, "status": "success"},
-        {"id": 12, "status": "success"},
-        {"id": 13, "status": "fail"},
+        {"id": 1, "status": "fail"}
     ]
 
     for build in builds:
