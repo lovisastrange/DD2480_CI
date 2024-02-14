@@ -161,3 +161,4 @@ cython_debug/
 src/discord_bot/tokens.env
 
 /logs
+src/repository/*
