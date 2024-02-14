@@ -48,11 +48,11 @@ def test_specific_build_page(client):
         "status": "success",
     }
 
-    response = client.get(f'/server/{test_build["id"]}')
+    response = client.get(f'/server/{test_build.id}')
     assert response.status_code == 200
 
     content = response.data.decode('utf-8')
-    assert f"Build No. {test_build['id']}" in content
+    assert f"Build No. {test_build.id}" in content
     assert f"Event</strong>: {test_build['event'].capitalize()}" in content
     assert f"Date</strong>: {test_build['date']}" in content
     assert f"Branch</strong>: {test_build['branch']}" in content
