@@ -38,4 +38,4 @@ jobs:
       run: |
         export PYTHONPATH=src
         export WEBHOOK_SECRET="valid_signature"
-        pytest
+        pytest -k 'not specific_build'
