@@ -162,3 +162,4 @@ src/discord_bot/tokens.env
 
 /logs
 src/repository/*
+CI.db

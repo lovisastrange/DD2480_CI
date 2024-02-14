@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, render_template, request, current_app
 from .webhook_handler import Webhook_handler
-from .db import query_builds, query_build
+#from .db import query_builds, query_build
+from .database import BuildHistory
 from .builder import Builder
 from .notification import send_notification_webhook
 from dotenv import load_dotenv
@@ -15,7 +16,7 @@ def home():
     Displays the list of previous builds.
     """
     current_app.logger.info("Home page loaded")
-    build_hist = query_builds()
+    data = BuildHistory.query.all.to_dict()
     return render_template('base.html', build_hist=build_hist)
 
 @bp.route('/<int:build_id>', methods=["GET"])
@@ -24,7 +25,7 @@ def specific_build(build_id):
     Route accessing a specific build in
     the build history.
     """
-    data = query_build(build_id)
+    data = BuildHistory.query.get(build_id).to_dict()
     return render_template('specific_build.html', data=data)
 
 

@@ -4,6 +4,10 @@ from flask import Flask
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
+from .database import init_db
+
+init_db()
+
 
 def create_app(test_config : dict = None):
     """
