@@ -39,7 +39,8 @@ def init_db():
     # you will have to import them first before calling init_db()
     
     Base.metadata.create_all(bind=engine)
-    # Insert a row of data
-    build1 = BuildHistory('new-branch', 'pull request', 'fail')
-    db_session.add(build1)
-    db_session.commit()
+    if not db_session.query(BuildHistory).all():
+        # Insert a row if there is no data
+        build1 = BuildHistory('new-branch', 'pull request', 'fail')
+        db_session.add(build1)
+        db_session.commit()
