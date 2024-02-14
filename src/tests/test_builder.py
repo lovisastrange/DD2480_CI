@@ -14,7 +14,7 @@ def test_clone_repo():
         "branch": "main"
     }
     builder = Builder(data)
-    repo_path = os.path.join(os.getcwd(), builder.repo)
+    repo_path = os.path.join(os.getcwd(), "repository", builder.repo)
 
     with patch('subprocess.run') as mock_run:
         # Call the clone_repo method
