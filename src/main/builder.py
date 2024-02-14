@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import requests
 import uuid
 from .syntax_checker import Syntax_Checker
-from DD2480_CI.src.main.database import db_session
+from .database import db_session
 from .database import BuildHistory
 
 class Builder:
@@ -140,7 +140,7 @@ class Builder:
             }
             requests.post(url, headers=headers, json=payload)
             # add data to database
-            bh=BuildHistory(branch=build.branch, event=build.commit, status="fail")
+            bh=BuildHistory(branch=build["branch"], event=build["commit"], status="fail")
             db_session.add(bh)
             db_session.commit()
 
@@ -157,7 +157,7 @@ class Builder:
             }
             requests.post(url, headers=headers, json=payload)
             # add data to database
-            bh=BuildHistory(branch=build.branch, event=build.commit, status="success")
+            bh=BuildHistory(branch=build["branch"], event=build["commit"], status="success")
             db_session.add(bh)
             db_session.commit()
 
