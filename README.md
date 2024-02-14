@@ -73,7 +73,7 @@ We still feel like our way of working fulfills the “In place” level of the c
 
 * Hugo Malmberg: Implemented webhook handler class to verify and parse data. Implemented a discord bot to handle notifications and later replaced said bot with a webhook.
  
-* Olivia Aronsson: 
+* Olivia Aronsson: Implemented builder class to clone github repository and run test on cloned repository.
 
 * Lovisa Strange: Set up and implemented syntax checking for the code and corresponding tests. Wrote code and tests for automatically running tests on the code that did not end up being used due to accidentally double assigning an issue. Participated in reviewing code by other group members and in writing README file and wrote assessment of way of working.
 
