@@ -35,6 +35,10 @@ def init_db():
     # you will have to import them first before calling init_db()
     
     Base.metadata.create_all(bind=engine)
+    # データを追加
+    build1 = BuildHistory('new-branch', 'pull request', 'fail')
+    db_session.add(build1)
+    db_session.commit()
 
 
 # from datetime import datetime
